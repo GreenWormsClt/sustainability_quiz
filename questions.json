@@ -1,112 +1,112 @@
 [
     {
-        "question": "What is the most effective way to reduce your carbon footprint from transportation?",
+        "question": "What is sustainable agriculture?",
         "options": [
-            "Driving an electric car",
-            "Using public transportation",
-            "Cycling or walking",
-            "Working from home"
+            "Growing food using synthetic fertilizers and pesticides",
+            "Farming practices that maintain soil health and biodiversity",
+            "Maximizing short-term yield regardless of environmental impact",
+            "Using only genetically modified crops"
         ],
-        "answer": 2,
-        "fact": "Cycling or walking produces zero emissions and improves your health!"
+        "answer": 1,
+        "fact": "Sustainable agriculture focuses on farming techniques that preserve natural resources, improve soil health, and maintain biodiversity."
     },
     {
-        "question": "Which of these materials takes the longest to decompose in landfills?",
+        "question": "Which of the following is a renewable energy source?",
         "options": [
-            "Paper (2-6 weeks)",
-            "Banana peel (2-10 days)",
-            "Plastic bottle (450 years)",
-            "Cotton T-shirt (2-5 months)"
-        ],
-        "answer": 2,
-        "fact": "Plastic bottles can take up to 450 years to decompose, which is why recycling is so important."
-    },
-    {
-        "question": "What percentage of the world's water is available as fresh water for human use?",
-        "options": [
-            "About 50%",
-            "About 25%",
-            "About 10%",
-            "Less than 1%"
-        ],
-        "answer": 3,
-        "fact": "Only 0.007% of all water on Earth is readily available fresh water for human use."
-    },
-    {
-        "question": "Which of these is NOT a renewable energy source?",
-        "options": [
-            "Solar power",
-            "Wind power",
+            "Coal",
             "Natural gas",
-            "Hydropower"
+            "Wind power",
+            "Oil"
         ],
         "answer": 2,
-        "fact": "Natural gas is a fossil fuel, while the others are renewable energy sources."
+        "fact": "Wind power is a renewable energy source because it uses the natural wind flow to generate electricity without depleting resources."
     },
     {
-        "question": "What is the '5 R's' principle in sustainability?",
+        "question": "What is the primary contributor to ocean plastic pollution?",
         "options": [
-            "Reduce, Reuse, Recycle, Rot, Reflect",
-            "Reduce, Reuse, Recycle, Repair, Refuse",
-            "Reduce, Reuse, Recycle, Recover, Rot",
-            "Reduce, Reuse, Recycle, Refuse, Rethink"
-        ],
-        "answer": 3,
-        "fact": "The 5 R's are: Refuse what you don't need, Reduce what you do need, Reuse what you consume, Recycle what you can't refuse/reduce/reuse, and Rot (compost) the rest."
-    },
-    {
-        "question": "Which food has the highest water footprint per kilogram?",
-        "options": [
-            "Potatoes",
-            "Rice",
-            "Beef",
-            "Tomatoes"
-        ],
-        "answer": 2,
-        "fact": "Beef requires about 15,000 liters of water per kilogram, mostly for growing animal feed."
-    },
-    {
-        "question": "What percentage of plastic waste is actually recycled globally?",
-        "options": [
-            "About 9%",
-            "About 25%",
-            "About 50%",
-            "About 75%"
+            "Land-based waste disposal",
+            "Industrial effluents directly dumped into the sea",
+            "Waste from ships",
+            "Natural oceanic processes"
         ],
         "answer": 0,
-        "fact": "Only 9% of all plastic waste ever produced has been recycled, while 12% has been incinerated and 79% has accumulated in landfills or the natural environment."
+        "fact": "Most ocean plastic pollution originates from land-based sources, including improper waste disposal and littering."
     },
     {
-        "question": "Which of these actions saves the most energy at home?",
+        "question": "What does the term 'circular economy' refer to?",
         "options": [
-            "Switching to LED bulbs",
-            "Using a programmable thermostat",
-            "Washing clothes in cold water",
-            "Unplugging electronics when not in use"
+            "A linear model of consumption with a focus on endless production",
+            "An economic system aimed at minimizing waste through reuse and recycling",
+            "An economy that solely relies on disposable products",
+            "A system where products are designed for a short lifespan"
         ],
         "answer": 1,
-        "fact": "A programmable thermostat can save about 10% a year on heating and cooling by turning your thermostat back 7°-10°F for 8 hours a day."
+        "fact": "A circular economy is designed to keep products, components, and materials at their highest utility and value at all times, reducing waste."
     },
     {
-        "question": "What is the main cause of deforestation worldwide?",
+        "question": "Which practice helps reduce water consumption in households?",
         "options": [
-            "Urban development",
-            "Agriculture (especially livestock and crops)",
-            "Logging for timber",
-            "Mining operations"
+            "Installing low-flow fixtures",
+            "Taking long showers",
+            "Watering lawns daily",
+            "Using inefficient irrigation systems"
+        ],
+        "answer": 0,
+        "fact": "Installing low-flow fixtures is an effective way to reduce water usage without compromising performance."
+    },
+    {
+        "question": "What is the main goal of sustainable development?",
+        "options": [
+            "Achieving economic growth at any environmental cost",
+            "Preserving natural resources for future generations",
+            "Maximizing profits over resource conservation",
+            "Ignoring the environmental impact of development"
         ],
         "answer": 1,
-        "fact": "Agriculture drives around 80% of deforestation, with cattle ranching being the largest single driver."
+        "fact": "Sustainable development seeks to balance economic growth with environmental protection and social well-being, ensuring resources for future generations."
     },
     {
-        "question": "Which country generates the highest percentage of its electricity from renewable sources?",
+        "question": "Which of the following is a benefit of renewable energy?",
         "options": [
-            "Germany",
-            "Sweden",
-            "Iceland",
-            "Costa Rica"
+            "Increases air pollution",
+            "Reduces greenhouse gas emissions",
+            "Depletes nonrenewable resources",
+            "Creates more noise pollution"
         ],
-        "answer": 2,
-        "fact": "Iceland generates 100% of its electricity from renewable sources, primarily hydropower and geothermal power."
+        "answer": 1,
+        "fact": "Renewable energy sources such as solar and wind reduce greenhouse gas emissions and help combat climate change."
+    },
+    {
+        "question": "Which practice is key to responsible waste management?",
+        "options": [
+            "Recycling and composting",
+            "Open burning of waste",
+            "Unsorted landfilling",
+            "Dumping waste in water bodies"
+        ],
+        "answer": 0,
+        "fact": "Recycling and composting are essential components of responsible waste management, helping to reduce landfill use and environmental harm."
+    },
+    {
+        "question": "What is a major advantage of green building practices?",
+        "options": [
+            "Higher energy bills",
+            "Improved indoor air quality and energy efficiency",
+            "Increased construction costs with no benefits",
+            "Greater resource consumption"
+        ],
+        "answer": 1,
+        "fact": "Green buildings are designed to improve energy efficiency, reduce waste, and enhance the quality of the indoor environment."
+    },
+    {
+        "question": "Which of the following is considered a sustainable transportation option?",
+        "options": [
+            "Driving alone in a conventional car",
+            "Carpooling or using public transit",
+            "Frequent short-haul flights",
+            "Using rideshares with fossil fuel vehicles"
+        ],
+        "answer": 1,
+        "fact": "Carpooling and using public transit reduce the number of vehicles on the road, lowering emissions and saving energy."
     }
-] 
+]

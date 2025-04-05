@@ -6,6 +6,7 @@
     <title>Eco Quiz Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
         
@@ -13,29 +14,113 @@
             font-family: 'Poppins', sans-serif;
             background-color: #f0fff4;
         }
+        
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .responsive-padding {
+                padding: 1rem;
+            }
+            
+            .responsive-card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Password overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .password-container {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
     </style>
 </head>
-<body class="min-h-screen p-6">
-    <div class="max-w-4xl mx-auto">
+<body class="min-h-screen p-6 responsive-padding">
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay" class="overlay">
+        <div class="password-container bg-white p-8 rounded-xl shadow-xl max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <i class="fas fa-lock text-4xl text-green-600 mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-800">Admin Access</h2>
+                <p class="text-gray-600 mt-2">Please enter the password to view statistics</p>
+            </div>
+            
+            <form id="password-form" class="space-y-4">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input type="password" id="password-input" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter password" required>
+                    <p id="password-error" class="text-red-500 text-sm mt-1 hidden">Incorrect password. Please try again.</p>
+                </div>
+                
+                <div class="flex justify-between items-center mt-6">
+                    <a href="index.html" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to Quiz
+                    </a>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md transition-all">
+                        <i class="fas fa-unlock-alt mr-2"></i> Access
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-content" class="max-w-4xl mx-auto hidden">
         <header class="mb-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-leaf text-3xl text-green-600 mr-3"></i>
                     <h1 class="text-2xl font-bold text-green-800">Eco Quiz Admin</h1>
                 </div>
-                <a href="index.html" class="text-green-600 hover:text-green-800">
-                    <i class="fas fa-arrow-left mr-2"></i> Back to Quiz
-                </a>
+                <div class="flex items-center gap-4">
+                    <button id="lock-btn" class="text-gray-600 hover:text-gray-800" title="Lock Admin Panel">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <a href="index.html" class="text-green-600 hover:text-green-800">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Quiz
+                    </a>
+                </div>
             </div>
             <p class="text-gray-600 mt-2">View quiz attendee statistics</p>
         </header>
 
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <div class="mb-4 flex justify-between items-center">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6 responsive-card">
+            <div class="mb-4 flex justify-between items-center flex-wrap gap-2">
                 <h2 class="text-xl font-semibold text-gray-800">Quiz Attendees</h2>
-                <button id="refresh-btn" class="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200">
-                    <i class="fas fa-sync-alt mr-2"></i> Refresh
-                </button>
+                <div class="flex gap-2 flex-wrap">
+                    <button id="refresh-btn" class="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200">
+                        <i class="fas fa-sync-alt mr-2"></i> Refresh
+                    </button>
+                    <button id="backup-btn" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200">
+                        <i class="fas fa-save mr-2"></i> Backup
+                    </button>
+                </div>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -46,6 +131,15 @@
                 <div class="bg-blue-50 p-4 rounded-md">
                     <h3 class="text-lg font-medium text-blue-800 mb-2">Average Score</h3>
                     <p id="average-score" class="text-3xl font-bold text-blue-600">0</p>
+                </div>
+            </div>
+            
+            <!-- Analytics Section -->
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-800 mb-4">Participation Analytics</h3>
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <h4 class="text-md font-medium text-gray-700 mb-2">Daily Participation</h4>
+                    <canvas id="daily-chart" height="150"></canvas>
                 </div>
             </div>
             
@@ -68,25 +162,165 @@
             </div>
         </div>
         
-        <div class="mt-6 text-center">
-            <button id="export-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                <i class="fas fa-download mr-2"></i> Export Data (CSV)
-            </button>
-            <button id="clear-btn" class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 ml-4">
-                <i class="fas fa-trash-alt mr-2"></i> Clear All Data
-            </button>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6 responsive-card">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Management</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-md font-medium text-gray-700 mb-2">Export Data</h3>
+                    <p class="text-sm text-gray-500 mb-3">Download your data for backup or analysis</p>
+                    <div class="flex gap-2 flex-wrap">
+                        <button id="export-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                            <i class="fas fa-download mr-2"></i> Export CSV
+                        </button>
+                        <button id="export-json-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                            <i class="fas fa-file-code mr-2"></i> Export JSON
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-md font-medium text-gray-700 mb-2">Import Data</h3>
+                    <p class="text-sm text-gray-500 mb-3">Restore from a previous backup</p>
+                    <div class="flex flex-col gap-2">
+                        <input type="file" id="import-file" class="hidden" accept=".json">
+                        <button id="import-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            <i class="fas fa-upload mr-2"></i> Import Backup
+                        </button>
+                        <div id="import-status" class="text-sm text-gray-500 mt-1"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 border-t pt-4">
+                <h3 class="text-md font-medium text-red-700 mb-2">Danger Zone</h3>
+                <p class="text-sm text-gray-500 mb-3">These actions cannot be undone</p>
+                <div class="flex flex-wrap gap-2">
+                    <button id="clear-btn" class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200">
+                        <i class="fas fa-trash-alt mr-2"></i> Clear All Data
+                    </button>
+                    <button id="change-password-btn" class="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200">
+                        <i class="fas fa-key mr-2"></i> Change Password
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <footer class="text-center text-sm text-gray-500 mt-8">
+            <p>Admin dashboard for Eco Quiz Challenge</p>
+            <p class="text-xs mt-1">Data is stored locally in your browser</p>
+        </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const STORAGE_KEY = 'eco_quiz_attendees';
+            const BACKUP_TIMESTAMP_KEY = 'eco_quiz_last_backup';
+            const PASSWORD_KEY = 'eco_quiz_admin_password';
+            
+            // Password protection elements
+            const passwordOverlay = document.getElementById('password-overlay');
+            const passwordForm = document.getElementById('password-form');
+            const passwordInput = document.getElementById('password-input');
+            const passwordError = document.getElementById('password-error');
+            const adminContent = document.getElementById('admin-content');
+            const lockBtn = document.getElementById('lock-btn');
+            const changePasswordBtn = document.getElementById('change-password-btn');
+            
+            // Default password (can be changed by admin)
+            const DEFAULT_PASSWORD = 'ecoadmin';
+            
+            // Get current password or set default if none exists
+            function getPassword() {
+                return localStorage.getItem(PASSWORD_KEY) || DEFAULT_PASSWORD;
+            }
+            
+            // Set password
+            function setPassword(password) {
+                localStorage.setItem(PASSWORD_KEY, password);
+            }
+            
+            // Initialize password if not set
+            if (!localStorage.getItem(PASSWORD_KEY)) {
+                setPassword(DEFAULT_PASSWORD);
+            }
+            
+            // Handle password submission
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const enteredPassword = passwordInput.value;
+                const currentPassword = getPassword();
+                
+                if (enteredPassword === currentPassword) {
+                    // Show admin content
+                    passwordOverlay.classList.add('hidden');
+                    adminContent.classList.remove('hidden');
+                    passwordInput.value = '';
+                    
+                    // Initialize admin panel content
+                    loadAttendeeData();
+                } else {
+                    // Show error
+                    passwordError.classList.remove('hidden');
+                    passwordForm.classList.add('shake');
+                    setTimeout(() => {
+                        passwordForm.classList.remove('shake');
+                    }, 500);
+                }
+            });
+            
+            // Lock button handler
+            lockBtn.addEventListener('click', function() {
+                adminContent.classList.add('hidden');
+                passwordOverlay.classList.remove('hidden');
+                passwordError.classList.add('hidden');
+            });
+            
+            // Change password button handler
+            changePasswordBtn.addEventListener('click', function() {
+                const currentPassword = prompt('Enter current password:');
+                
+                if (!currentPassword) return;
+                
+                if (currentPassword === getPassword()) {
+                    const newPassword = prompt('Enter new password (minimum 6 characters):');
+                    
+                    if (!newPassword) return;
+                    
+                    if (newPassword.length < 6) {
+                        alert('Password must be at least 6 characters long.');
+                        return;
+                    }
+                    
+                    // Confirm new password
+                    const confirmPassword = prompt('Confirm new password:');
+                    
+                    if (newPassword === confirmPassword) {
+                        setPassword(newPassword);
+                        alert('Password changed successfully!');
+                    } else {
+                        alert('Passwords do not match. Please try again.');
+                    }
+                } else {
+                    alert('Incorrect current password.');
+                }
+            });
+            
+            // Admin dashboard elements
             const totalAttendeesElement = document.getElementById('total-attendees');
             const averageScoreElement = document.getElementById('average-score');
             const attendeesTableElement = document.getElementById('attendees-table');
             const refreshBtn = document.getElementById('refresh-btn');
             const exportBtn = document.getElementById('export-btn');
+            const exportJsonBtn = document.getElementById('export-json-btn');
+            const importBtn = document.getElementById('import-btn');
+            const importFile = document.getElementById('import-file');
+            const importStatus = document.getElementById('import-status');
             const clearBtn = document.getElementById('clear-btn');
+            const backupBtn = document.getElementById('backup-btn');
+            
+            let dailyChart = null;
             
             // Load and display attendee data
             function loadAttendeeData() {
@@ -102,6 +336,9 @@
                     : 'N/A';
                 
                 averageScoreElement.textContent = averageScore;
+                
+                // Update analytics - now only daily chart
+                updateDailyChart(attendees);
                 
                 // Clear and populate table
                 attendeesTableElement.innerHTML = '';
@@ -139,7 +376,69 @@
                 });
             }
             
-            // Export data as CSV
+            // Update analytics charts - removing device chart reference
+            function updateAnalytics(attendees) {
+                // Only daily participation analytics now
+                updateDailyChart(attendees);
+            }
+            
+            // Update daily participation chart
+            function updateDailyChart(attendees) {
+                // Group by date
+                const dailyData = {};
+                
+                attendees.forEach(attendee => {
+                    const date = new Date(attendee.timestamp).toLocaleDateString();
+                    dailyData[date] = (dailyData[date] || 0) + 1;
+                });
+                
+                // Get last 7 days of data
+                const dates = Object.keys(dailyData).sort((a, b) => new Date(b) - new Date(a)).slice(0, 7).reverse();
+                const counts = dates.map(date => dailyData[date]);
+                
+                // Prepare chart data
+                const chartData = {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Participants',
+                        data: counts,
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1
+                    }]
+                };
+                
+                // Create or update chart
+                const dailyCtx = document.getElementById('daily-chart').getContext('2d');
+                
+                if (dailyChart) {
+                    dailyChart.data = chartData;
+                    dailyChart.update();
+                } else {
+                    dailyChart = new Chart(dailyCtx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        precision: 0
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Export data as CSV - removing device type
             function exportData() {
                 const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
                 
@@ -157,6 +456,7 @@
                 attendees.forEach(attendee => {
                     const formattedDate = new Date(attendee.timestamp).toLocaleString();
                     const scoreDisplay = attendee.score !== null ? attendee.score : 'In progress';
+                    
                     csvRows.push([
                         `"${attendee.name}"`,
                         `"${formattedDate}"`,
@@ -181,9 +481,114 @@
                 document.body.removeChild(link);
             }
             
+            // Export data as JSON
+            function exportJsonData() {
+                const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                
+                if (attendees.length === 0) {
+                    alert('No data to export');
+                    return;
+                }
+                
+                // Create JSON content
+                const jsonContent = JSON.stringify(attendees, null, 2);
+                
+                // Create and download file
+                const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', `eco_quiz_backup_${new Date().toISOString().slice(0, 10)}.json`);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Update backup timestamp
+                localStorage.setItem(BACKUP_TIMESTAMP_KEY, new Date().toISOString());
+            }
+            
+            // Import data from JSON file
+            function importData() {
+                importFile.click();
+            }
+            
+            // Handle file import
+            function handleFileImport(event) {
+                const file = event.target.files[0];
+                
+                if (!file) {
+                    return;
+                }
+                
+                // Check file type
+                if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                    importStatus.textContent = 'Error: Please select a valid JSON file';
+                    importStatus.className = 'text-sm text-red-500 mt-1';
+                    return;
+                }
+                
+                importStatus.textContent = 'Importing data...';
+                importStatus.className = 'text-sm text-blue-500 mt-1';
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        // Validate imported data
+                        if (!Array.isArray(importedData)) {
+                            throw new Error('Invalid data format');
+                        }
+                        
+                        // Confirm import
+                        if (confirm(`Import ${importedData.length} records? This will replace your current data.`)) {
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(importedData));
+                            localStorage.setItem(BACKUP_TIMESTAMP_KEY, new Date().toISOString());
+                            
+                            importStatus.textContent = `Success! Imported ${importedData.length} records.`;
+                            importStatus.className = 'text-sm text-green-500 mt-1';
+                            
+                            loadAttendeeData();
+                        } else {
+                            importStatus.textContent = 'Import cancelled';
+                            importStatus.className = 'text-sm text-gray-500 mt-1';
+                        }
+                    } catch (error) {
+                        console.error('Import error:', error);
+                        importStatus.textContent = `Error: ${error.message}`;
+                        importStatus.className = 'text-sm text-red-500 mt-1';
+                    }
+                    
+                    // Reset file input
+                    importFile.value = '';
+                };
+                
+                reader.onerror = function() {
+                    importStatus.textContent = 'Error reading file';
+                    importStatus.className = 'text-sm text-red-500 mt-1';
+                };
+                
+                reader.readAsText(file);
+            }
+            
+            // Create backup
+            function createBackup() {
+                exportJsonData();
+                alert('Data backup created successfully!');
+            }
+            
             // Clear all data
             function clearData() {
                 if (confirm('Are you sure you want to clear all attendee data? This action cannot be undone.')) {
+                    // Prompt for backup before clearing
+                    if (confirm('Would you like to create a backup before clearing the data?')) {
+                        exportJsonData();
+                    }
+                    
                     localStorage.removeItem(STORAGE_KEY);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
                     loadAttendeeData();
@@ -194,10 +599,11 @@
             // Event listeners
             refreshBtn.addEventListener('click', loadAttendeeData);
             exportBtn.addEventListener('click', exportData);
+            exportJsonBtn.addEventListener('click', exportJsonData);
+            importBtn.addEventListener('click', importData);
+            importFile.addEventListener('change', handleFileImport);
             clearBtn.addEventListener('click', clearData);
-            
-            // Initial load
-            loadAttendeeData();
+            backupBtn.addEventListener('click', createBackup);
         });
     </script>
 </body>
