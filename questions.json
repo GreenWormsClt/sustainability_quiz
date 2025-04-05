@@ -1,0 +1,112 @@
+[
+    {
+        "question": "What is the most effective way to reduce your carbon footprint from transportation?",
+        "options": [
+            "Driving an electric car",
+            "Using public transportation",
+            "Cycling or walking",
+            "Working from home"
+        ],
+        "answer": 2,
+        "fact": "Cycling or walking produces zero emissions and improves your health!"
+    },
+    {
+        "question": "Which of these materials takes the longest to decompose in landfills?",
+        "options": [
+            "Paper (2-6 weeks)",
+            "Banana peel (2-10 days)",
+            "Plastic bottle (450 years)",
+            "Cotton T-shirt (2-5 months)"
+        ],
+        "answer": 2,
+        "fact": "Plastic bottles can take up to 450 years to decompose, which is why recycling is so important."
+    },
+    {
+        "question": "What percentage of the world's water is available as fresh water for human use?",
+        "options": [
+            "About 50%",
+            "About 25%",
+            "About 10%",
+            "Less than 1%"
+        ],
+        "answer": 3,
+        "fact": "Only 0.007% of all water on Earth is readily available fresh water for human use."
+    },
+    {
+        "question": "Which of these is NOT a renewable energy source?",
+        "options": [
+            "Solar power",
+            "Wind power",
+            "Natural gas",
+            "Hydropower"
+        ],
+        "answer": 2,
+        "fact": "Natural gas is a fossil fuel, while the others are renewable energy sources."
+    },
+    {
+        "question": "What is the '5 R's' principle in sustainability?",
+        "options": [
+            "Reduce, Reuse, Recycle, Rot, Reflect",
+            "Reduce, Reuse, Recycle, Repair, Refuse",
+            "Reduce, Reuse, Recycle, Recover, Rot",
+            "Reduce, Reuse, Recycle, Refuse, Rethink"
+        ],
+        "answer": 3,
+        "fact": "The 5 R's are: Refuse what you don't need, Reduce what you do need, Reuse what you consume, Recycle what you can't refuse/reduce/reuse, and Rot (compost) the rest."
+    },
+    {
+        "question": "Which food has the highest water footprint per kilogram?",
+        "options": [
+            "Potatoes",
+            "Rice",
+            "Beef",
+            "Tomatoes"
+        ],
+        "answer": 2,
+        "fact": "Beef requires about 15,000 liters of water per kilogram, mostly for growing animal feed."
+    },
+    {
+        "question": "What percentage of plastic waste is actually recycled globally?",
+        "options": [
+            "About 9%",
+            "About 25%",
+            "About 50%",
+            "About 75%"
+        ],
+        "answer": 0,
+        "fact": "Only 9% of all plastic waste ever produced has been recycled, while 12% has been incinerated and 79% has accumulated in landfills or the natural environment."
+    },
+    {
+        "question": "Which of these actions saves the most energy at home?",
+        "options": [
+            "Switching to LED bulbs",
+            "Using a programmable thermostat",
+            "Washing clothes in cold water",
+            "Unplugging electronics when not in use"
+        ],
+        "answer": 1,
+        "fact": "A programmable thermostat can save about 10% a year on heating and cooling by turning your thermostat back 7°-10°F for 8 hours a day."
+    },
+    {
+        "question": "What is the main cause of deforestation worldwide?",
+        "options": [
+            "Urban development",
+            "Agriculture (especially livestock and crops)",
+            "Logging for timber",
+            "Mining operations"
+        ],
+        "answer": 1,
+        "fact": "Agriculture drives around 80% of deforestation, with cattle ranching being the largest single driver."
+    },
+    {
+        "question": "Which country generates the highest percentage of its electricity from renewable sources?",
+        "options": [
+            "Germany",
+            "Sweden",
+            "Iceland",
+            "Costa Rica"
+        ],
+        "answer": 2,
+        "fact": "Iceland generates 100% of its electricity from renewable sources, primarily hydropower and geothermal power."
+    }
+] 

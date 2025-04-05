@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Quiz Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0fff4;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-leaf text-3xl text-green-600 mr-3"></i>
+                    <h1 class="text-2xl font-bold text-green-800">Eco Quiz Admin</h1>
+                </div>
+                <a href="index.html" class="text-green-600 hover:text-green-800">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Quiz
+                </a>
+            </div>
+            <p class="text-gray-600 mt-2">View quiz attendee statistics</p>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="mb-4 flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-800">Quiz Attendees</h2>
+                <button id="refresh-btn" class="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200">
+                    <i class="fas fa-sync-alt mr-2"></i> Refresh
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-green-50 p-4 rounded-md">
+                    <h3 class="text-lg font-medium text-green-800 mb-2">Total Participants</h3>
+                    <p id="total-attendees" class="text-3xl font-bold text-green-600">0</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-md">
+                    <h3 class="text-lg font-medium text-blue-800 mb-2">Average Score</h3>
+                    <p id="average-score" class="text-3xl font-bold text-blue-600">0</p>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Name</th>
+                            <th class="py-3 px-6 text-left">Date & Time</th>
+                            <th class="py-3 px-6 text-center">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendees-table" class="text-gray-600 text-sm">
+                        <!-- Attendee data will be loaded here -->
+                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                            <td class="py-3 px-6 text-left" colspan="3">Loading attendee data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <button id="export-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                <i class="fas fa-download mr-2"></i> Export Data (CSV)
+            </button>
+            <button id="clear-btn" class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 ml-4">
+                <i class="fas fa-trash-alt mr-2"></i> Clear All Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const STORAGE_KEY = 'eco_quiz_attendees';
+            const totalAttendeesElement = document.getElementById('total-attendees');
+            const averageScoreElement = document.getElementById('average-score');
+            const attendeesTableElement = document.getElementById('attendees-table');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            
+            // Load and display attendee data
+            function loadAttendeeData() {
+                const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                
+                // Update stats
+                totalAttendeesElement.textContent = attendees.length;
+                
+                // Calculate average score (only for attendees who completed the quiz)
+                const completedAttendees = attendees.filter(a => a.score !== null);
+                const averageScore = completedAttendees.length > 0 
+                    ? (completedAttendees.reduce((sum, a) => sum + a.score, 0) / completedAttendees.length).toFixed(1) 
+                    : 'N/A';
+                
+                averageScoreElement.textContent = averageScore;
+                
+                // Clear and populate table
+                attendeesTableElement.innerHTML = '';
+                
+                if (attendees.length === 0) {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200';
+                    row.innerHTML = `
+                        <td class="py-3 px-6 text-left" colspan="3">No attendee data found</td>
+                    `;
+                    attendeesTableElement.appendChild(row);
+                    return;
+                }
+                
+                // Sort by most recent first
+                attendees.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                attendees.forEach(attendee => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200 hover:bg-gray-50';
+                    
+                    const formattedDate = new Date(attendee.timestamp).toLocaleString();
+                    const scoreDisplay = attendee.score !== null ? attendee.score : 'In progress';
+                    const scoreClass = attendee.score !== null 
+                        ? (attendee.score >= 7 ? 'text-green-600' : attendee.score >= 5 ? 'text-yellow-600' : 'text-red-600')
+                        : 'text-gray-500';
+                    
+                    row.innerHTML = `
+                        <td class="py-3 px-6 text-left">${attendee.name}</td>
+                        <td class="py-3 px-6 text-left">${formattedDate}</td>
+                        <td class="py-3 px-6 text-center font-medium ${scoreClass}">${scoreDisplay}</td>
+                    `;
+                    
+                    attendeesTableElement.appendChild(row);
+                });
+            }
+            
+            // Export data as CSV
+            function exportData() {
+                const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                
+                if (attendees.length === 0) {
+                    alert('No data to export');
+                    return;
+                }
+                
+                const csvRows = [];
+                
+                // Add header
+                csvRows.push(['Name', 'Date & Time', 'Score'].join(','));
+                
+                // Add rows
+                attendees.forEach(attendee => {
+                    const formattedDate = new Date(attendee.timestamp).toLocaleString();
+                    const scoreDisplay = attendee.score !== null ? attendee.score : 'In progress';
+                    csvRows.push([
+                        `"${attendee.name}"`,
+                        `"${formattedDate}"`,
+                        `"${scoreDisplay}"`
+                    ].join(','));
+                });
+                
+                // Create CSV content
+                const csvContent = csvRows.join('\n');
+                
+                // Create and download file
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', `eco_quiz_attendees_${new Date().toISOString().slice(0, 10)}.csv`);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            // Clear all data
+            function clearData() {
+                if (confirm('Are you sure you want to clear all attendee data? This action cannot be undone.')) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                    loadAttendeeData();
+                    alert('All attendee data has been cleared');
+                }
+            }
+            
+            // Event listeners
+            refreshBtn.addEventListener('click', loadAttendeeData);
+            exportBtn.addEventListener('click', exportData);
+            clearBtn.addEventListener('click', clearData);
+            
+            // Initial load
+            loadAttendeeData();
+        });
+    </script>
+</body>
+</html> 

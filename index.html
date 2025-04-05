@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Quiz Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary-green: #38a169;
+            --dark-green: #2f855a;
+            --light-green: #c6f6d5;
+            --earth-brown: #a16207;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0fff4;
+            perspective: 1000px;
+        }
+        
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            box-shadow: 0 20px 30px rgba(0, 100, 0, 0.2);
+        }
+        
+        .card-3d:hover {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+        
+        .option-card {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px) rotateY(5deg);
+            box-shadow: 0 10px 15px rgba(0, 100, 0, 0.1);
+        }
+        
+        .correct {
+            animation: correctAnswer 0.5s ease;
+            background-color: #48bb78 !important;
+        }
+        
+        .incorrect {
+            animation: incorrectAnswer 0.5s ease;
+            background-color: #f56565 !important;
+        }
+        
+        @keyframes correctAnswer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes incorrectAnswer {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .leaf-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .progress-leaf {
+            transition: all 0.5s ease;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+        }
+        
+        .reward-badge {
+            animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes badgePop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .earth-spin {
+            animation: spin 20s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
+        <!-- App Header -->
+        <header class="text-center mb-8">
+            <div class="relative inline-block">
+                <i class="fas fa-leaf text-5xl text-green-600 leaf-animation"></i>
+                <div class="absolute -bottom-2 -right-2 bg-green-100 rounded-full w-6 h-6 flex items-center justify-center">
+                    <i class="fas fa-recycle text-xs text-green-600 earth-spin"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold text-green-800 mt-4">Eco Quiz Challenge</h1>
+            <p class="text-green-600">Test your sustainability knowledge!</p>
+        </header>
+        
+        <!-- Main Quiz Container -->
+        <div id="quiz-container" class="bg-white rounded-2xl overflow-hidden shadow-xl card-3d">
+            <!-- Progress Bar -->
+            <div class="bg-green-100 h-2 relative">
+                <div id="progress-bar" class="bg-green-500 h-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                <div id="progress-leaves" class="absolute -top-3 left-0 flex w-full justify-between px-2">
+                    <!-- Leaves will be added dynamically -->
+                </div>
+            </div>
+            
+            <!-- Quiz Content -->
+            <div class="p-6 md:p-8">
+                <!-- Welcome Screen -->
+                <div id="welcome-screen" class="text-center">
+                    <div class="mb-6">
+                        <img src="https://cdn.pixabay.com/photo/2017/01/31/15/33/earth-2026279_960_720.png" alt="Earth" class="w-32 h-32 mx-auto earth-spin">
+                    </div>
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Welcome to the Sustainability Quiz!</h2>
+                    <p class="text-gray-600 mb-6">Test your knowledge about environmental protection, renewable energy, and sustainable living practices.</p>
+                    
+                    <!-- Registration Form -->
+                    <div class="bg-green-50 rounded-lg p-4 mb-6">
+                        <form id="registration-form" class="flex flex-col space-y-4">
+                            <div>
+                                <label for="user-name" class="block text-sm font-medium text-gray-700 text-left mb-1">Your Name</label>
+                                <input type="text" id="user-name" required class="w-full px-3 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your name">
+                            </div>
+                            <button type="submit" id="register-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition-all transform hover:scale-105 shadow-lg self-center">
+                                Start Quiz <i class="fas fa-seedling ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Attendee Counter -->
+                    <p id="attendee-counter" class="text-sm text-green-700 mt-2"></p>
+                </div>
+                
+                <!-- Quiz Screen -->
+                <div id="quiz-screen" class="hidden">
+                    <div class="mb-6">
+                        <h2 id="question-number" class="text-sm font-semibold text-green-600 mb-1">Question 1 of 10</h2>
+                        <p id="question-text" class="text-xl font-bold text-gray-800">Loading question...</p>
+                    </div>
+                    
+                    <div id="options-container" class="space-y-4 mb-8">
+                        <!-- Options will be added dynamically -->
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <button id="next-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 shadow-md hidden">
+                            Next <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                        <span id="feedback-message" class="text-sm font-medium"></span>
+                    </div>
+                </div>
+                
+                <!-- Results Screen -->
+                <div id="results-screen" class="hidden text-center">
+                    <div class="mb-6 relative">
+                        <img src="https://cdn.pixabay.com/photo/2016/11/29/08/41/apple-1868496_960_720.jpg" alt="Reward" class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-300 shadow-lg">
+                        <div class="absolute -top-2 -right-2 bg-yellow-400 text-yellow-800 rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl shadow-md reward-badge">
+                            <span id="score-badge">0</span>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-green-800 mb-2">Quiz Completed!</h2>
+                    <p id="result-message" class="text-gray-600 mb-6">You scored <span id="final-score" class="font-bold text-green-600">0</span> out of <span id="total-questions" class="font-bold">10</span></p>
+                    <div id="reward-message" class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 hidden">
+                        <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+                        <span>Congratulations! You've earned the <span class="font-bold">Green Guardian</span> badge!</span>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button id="restart-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 shadow-md">
+                            <i class="fas fa-redo mr-2"></i> Try Again
+                        </button>
+                        <button id="share-btn" class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 shadow-md">
+                            <i class="fas fa-share-alt mr-2"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Eco Facts Footer -->
+        <footer class="text-center mt-8 text-sm text-gray-500">
+            <p>Every correct answer plants a virtual seed for a greener future <i class="fas fa-leaf text-green-500"></i></p>
+            <p class="mt-2">
+                <a href="admin.html" class="text-green-600 hover:text-green-800 text-xs">
+                    <i class="fas fa-chart-bar mr-1"></i> View Statistics
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const quizScreen = document.getElementById('quiz-screen');
+            const resultsScreen = document.getElementById('results-screen');
+            const registrationForm = document.getElementById('registration-form');
+            const userNameInput = document.getElementById('user-name');
+            const attendeeCounter = document.getElementById('attendee-counter');
+            const nextBtn = document.getElementById('next-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const shareBtn = document.getElementById('share-btn');
+            const questionText = document.getElementById('question-text');
+            const questionNumber = document.getElementById('question-number');
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const progressBar = document.getElementById('progress-bar');
+            const progressLeaves = document.getElementById('progress-leaves');
+            const finalScore = document.getElementById('final-score');
+            const totalQuestions = document.getElementById('total-questions');
+            const scoreBadge = document.getElementById('score-badge');
+            const rewardMessage = document.getElementById('reward-message');
+            const resultMessage = document.getElementById('result-message');
+
+            // Quiz state
+            let questions = [];
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let quizCompleted = false;
+            let currentUser = "";
+            
+            // Attendee Storage
+            const STORAGE_KEY = 'eco_quiz_attendees';
+
+            // Initialize attendee storage if it doesn't exist
+            function initAttendeeStorage() {
+                if (!localStorage.getItem(STORAGE_KEY)) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                }
+                updateAttendeeCounter();
+            }
+            
+            // Add a new attendee
+            function addAttendee(name) {
+                const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                const timestamp = new Date().toISOString();
+                attendees.push({ name, timestamp, score: null });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(attendees));
+                currentUser = name;
+                updateAttendeeCounter();
+            }
+            
+            // Update attendee score
+            function updateAttendeeScore(score) {
+                if (!currentUser) return;
+                
+                const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                const userIndex = attendees.findIndex(a => a.name === currentUser && a.score === null);
+                
+                if (userIndex !== -1) {
+                    attendees[userIndex].score = score;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(attendees));
+                }
+            }
+            
+            // Update the counter display
+            function updateAttendeeCounter() {
+                const attendees = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                attendeeCounter.textContent = `Total quiz participants: ${attendees.length}`;
+            }
+
+            // Load questions from external JSON file
+            function loadQuestions() {
+                return fetch('questions.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load questions');
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.error('Error loading questions:', error);
+                        // Show error message to user
+                        alert('Failed to load quiz questions. Please try refreshing the page.');
+                    });
+            }
+
+            // Initialize the quiz
+            async function initQuiz() {
+                try {
+                    // Load questions if not already loaded
+                    if (questions.length === 0) {
+                        questions = await loadQuestions();
+                    }
+                    
+                    currentQuestionIndex = 0;
+                    score = 0;
+                    quizCompleted = false;
+                    
+                    // Create progress leaves
+                    progressLeaves.innerHTML = '';
+                    for (let i = 0; i < questions.length; i++) {
+                        const leaf = document.createElement('div');
+                        leaf.className = 'w-5 h-5 flex items-center justify-center progress-leaf';
+                        leaf.innerHTML = `<i class="fas fa-leaf text-gray-300 ${i === 0 ? 'text-green-500' : ''}"></i>`;
+                        progressLeaves.appendChild(leaf);
+                    }
+                    
+                    showWelcomeScreen();
+                } catch (error) {
+                    console.error('Error initializing quiz:', error);
+                }
+            }
+
+            // Show welcome screen
+            function showWelcomeScreen() {
+                welcomeScreen.classList.remove('hidden');
+                quizScreen.classList.add('hidden');
+                resultsScreen.classList.add('hidden');
+                progressBar.style.width = '0%';
+            }
+
+            // Handle registration form submission
+            function handleRegistration(e) {
+                e.preventDefault();
+                const userName = userNameInput.value.trim();
+                
+                if (userName) {
+                    addAttendee(userName);
+                    startQuiz();
+                }
+            }
+
+            // Start the quiz
+            function startQuiz() {
+                welcomeScreen.classList.add('hidden');
+                quizScreen.classList.remove('hidden');
+                resultsScreen.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+                feedbackMessage.textContent = '';
+                
+                showQuestion();
+            }
+
+            // Show current question
+            function showQuestion() {
+                const question = questions[currentQuestionIndex];
+                questionText.textContent = question.question;
+                questionNumber.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+                
+                // Update options
+                optionsContainer.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('button');
+                    optionElement.className = 'w-full text-left p-4 rounded-xl bg-green-50 hover:bg-green-100 border border-green-200 option-card';
+                    optionElement.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-white border-2 border-green-300 flex items-center justify-center mr-3 font-semibold text-green-700">${String.fromCharCode(65 + index)}</span>
+                            <span>${option}</span>
+                        </div>
+                    `;
+                    optionElement.addEventListener('click', () => selectAnswer(index));
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                // Update progress
+                progressBar.style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+                
+                // Update progress leaves
+                const leaves = progressLeaves.querySelectorAll('.fa-leaf');
+                leaves.forEach((leaf, index) => {
+                    if (index < currentQuestionIndex) {
+                        leaf.classList.add('text-green-500');
+                        leaf.classList.remove('text-gray-300');
+                    } else if (index > currentQuestionIndex) {
+                        leaf.classList.add('text-gray-300');
+                        leaf.classList.remove('text-green-500');
+                    } else {
+                        leaf.classList.add('text-green-500');
+                        leaf.classList.remove('text-gray-300');
+                    }
+                });
+            }
+
+            // Handle answer selection
+            function selectAnswer(selectedIndex) {
+                if (quizCompleted) return;
+                
+                const question = questions[currentQuestionIndex];
+                const options = optionsContainer.querySelectorAll('button');
+                
+                // Disable all options
+                options.forEach(option => {
+                    option.disabled = true;
+                });
+                
+                // Check if answer is correct
+                const isCorrect = selectedIndex === question.answer;
+                
+                // Visual feedback
+                if (isCorrect) {
+                    options[selectedIndex].classList.add('correct');
+                    score++;
+                    createConfetti(options[selectedIndex]);
+                } else {
+                    options[selectedIndex].classList.add('incorrect');
+                    options[question.answer].classList.add('correct');
+                }
+                
+                // Show feedback
+                feedbackMessage.textContent = isCorrect ? 
+                    `Correct! ${question.fact}` : 
+                    `Incorrect. ${question.fact}`;
+                feedbackMessage.className = `text-sm font-medium ${isCorrect ? 'text-green-600' : 'text-red-500'}`;
+                
+                // Show next button
+                nextBtn.classList.remove('hidden');
+            }
+
+            // Create confetti effect
+            function createConfetti(element) {
+                const rect = element.getBoundingClientRect();
+                const colors = ['#48bb78', '#4299e1', '#f6e05e', '#ed8936', '#9f7aea'];
+                
+                for (let i = 0; i < 20; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = `${rect.left + rect.width/2}px`;
+                    confetti.style.top = `${rect.top}px`;
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = 5 + Math.random() * 5;
+                    const x = Math.cos(angle) * velocity;
+                    const y = Math.sin(angle) * velocity;
+                    
+                    let posX = rect.left + rect.width/2;
+                    let posY = rect.top;
+                    let opacity = 1;
+                    let scale = 0.5 + Math.random();
+                    
+                    const animate = () => {
+                        posX += x;
+                        posY += y + 1; // Add gravity
+                        opacity -= 0.02;
+                        scale -= 0.01;
+                        
+                        confetti.style.left = `${posX}px`;
+                        confetti.style.top = `${posY}px`;
+                        confetti.style.opacity = opacity;
+                        confetti.style.transform = `rotate(${i * 18}deg) scale(${scale})`;
+                        
+                        if (opacity > 0) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            confetti.remove();
+                        }
+                    };
+                    
+                    setTimeout(() => {
+                        confetti.style.opacity = 1;
+                        animate();
+                    }, 0);
+                }
+            }
+
+            // Move to next question
+            function nextQuestion() {
+                currentQuestionIndex++;
+                
+                if (currentQuestionIndex < questions.length) {
+                    nextBtn.classList.add('hidden');
+                    feedbackMessage.textContent = '';
+                    showQuestion();
+                } else {
+                    showResults();
+                }
+            }
+
+            // Show results
+            function showResults() {
+                quizCompleted = true;
+                quizScreen.classList.add('hidden');
+                resultsScreen.classList.remove('hidden');
+                
+                // Update results
+                finalScore.textContent = score;
+                totalQuestions.textContent = questions.length;
+                scoreBadge.textContent = score;
+                
+                // Update attendee score in storage
+                updateAttendeeScore(score);
+                
+                // Set result message
+                const percentage = (score / questions.length) * 100;
+                let message = '';
+                
+                if (percentage >= 80) {
+                    message = 'Excellent! You\'re a true sustainability champion!';
+                    rewardMessage.classList.remove('hidden');
+                } else if (percentage >= 60) {
+                    message = 'Good job! You know quite a bit about sustainability.';
+                } else if (percentage >= 40) {
+                    message = 'Not bad! You have some sustainability knowledge.';
+                } else {
+                    message = 'Keep learning! Every small step towards sustainability counts.';
+                }
+                
+                resultMessage.innerHTML = `You scored <span id="final-score" class="font-bold text-green-600">${score}</span> out of <span id="total-questions" class="font-bold">${questions.length}</span>. ${message}`;
+                
+                // Complete progress bar
+                progressBar.style.width = '100%';
+                
+                // Update all leaves to green
+                const leaves = progressLeaves.querySelectorAll('.fa-leaf');
+                leaves.forEach(leaf => {
+                    leaf.classList.add('text-green-500');
+                    leaf.classList.remove('text-gray-300');
+                });
+            }
+
+            // Share results
+            function shareResults() {
+                const shareText = `I scored ${score}/${questions.length} on the Eco Quiz Challenge! Test your sustainability knowledge too.`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Eco Quiz Challenge',
+                        text: shareText,
+                        url: window.location.href
+                    }).catch(err => {
+                        console.log('Error sharing:', err);
+                        fallbackShare();
+                    });
+                } else {
+                    fallbackShare();
+                }
+                
+                function fallbackShare() {
+                    // Copy to clipboard as fallback
+                    navigator.clipboard.writeText(shareText + ' ' + window.location.href).then(() => {
+                        alert('Results copied to clipboard! You can now paste it to share.');
+                    }).catch(err => {
+                        console.log('Could not copy text: ', err);
+                        prompt('Copy this link to share:', shareText + ' ' + window.location.href);
+                    });
+                }
+            }
+
+            // Event listeners
+            registrationForm.addEventListener('submit', handleRegistration);
+            nextBtn.addEventListener('click', nextQuestion);
+            restartBtn.addEventListener('click', initQuiz);
+            shareBtn.addEventListener('click', shareResults);
+
+            // Initialize the quiz and storage
+            initAttendeeStorage();
+            initQuiz();
+        });
+    </script>
+</body>
+</html>
