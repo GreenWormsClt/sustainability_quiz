@@ -10,9 +10,55 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
         
+        :root {
+            --primary-green: #2E7D32; /* Forest green - more natural */
+            --light-green: #A5D6A7;   /* Soft leaf green */
+            --dark-green: #1B5E20;    /* Deep forest green */
+            --accent-brown: #795548;  /* Earth brown */
+            --natural-yellow: #FDD835; /* Sunlight yellow */
+            --sky-blue: #4FC3F7;      /* Fresh sky blue */
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f0fff4;
+            background-color: #F1F8E9; /* Very light natural green */
+            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"%3E%3Cpath fill="%232E7D32" d="M50,0 L100,50 L50,100 L0,50 z"%3E%3C/path%3E%3C/svg%3E');
+        }
+        
+        .eco-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #E8F5E9;
+            box-shadow: 0 10px 15px rgba(27, 94, 32, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .eco-card:hover {
+            box-shadow: 0 15px 20px rgba(27, 94, 32, 0.12);
+        }
+        
+        .eco-button {
+            background-color: var(--primary-green);
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .eco-button:hover {
+            background-color: var(--dark-green);
+        }
+        
+        .eco-button:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"%3E%3Cpath fill="%23ffffff" d="M30,30 C40,20 60,20 70,30 C80,40 80,60 70,70 C60,80 40,80 30,70 C20,60 20,40 30,30 z"%3E%3C/path%3E%3C/svg%3E');
+            background-size: 120px;
+            pointer-events: none;
+            z-index: 1;
         }
         
         /* Mobile optimizations */
@@ -44,6 +90,18 @@
         
         .password-container {
             animation: fadeIn 0.3s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.98);
+            border: 1px solid var(--light-green);
+        }
+        
+        .eco-input {
+            border-color: var(--light-green);
+            transition: all 0.3s ease;
+        }
+        
+        .eco-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
         }
         
         @keyframes fadeIn {
@@ -63,19 +121,31 @@
     </style>
 </head>
 <body class="min-h-screen p-6 responsive-padding">
+    <!-- Audio Element -->
+    <audio id="click-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3" type="audio/mpeg">
+    </audio>
+    
     <!-- Password Protection Overlay -->
     <div id="password-overlay" class="overlay">
         <div class="password-container bg-white p-8 rounded-xl shadow-xl max-w-md w-full mx-4">
             <div class="text-center mb-6">
-                <i class="fas fa-lock text-4xl text-green-600 mb-4"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Admin Access</h2>
+                <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-lock text-3xl text-green-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-green-800 mt-4">Admin Access</h2>
                 <p class="text-gray-600 mt-2">Please enter the password to view statistics</p>
             </div>
             
             <form id="password-form" class="space-y-4">
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input type="password" id="password-input" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter password" required>
+                <div class="relative">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                        <i class="fas fa-key text-green-600 mr-2"></i>Password
+                    </label>
+                    <input type="password" id="password-input" class="w-full px-4 py-2 border eco-input rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter password" required>
+                    <div class="absolute top-8 right-3 text-green-400 pointer-events-none">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
                     <p id="password-error" class="text-red-500 text-sm mt-1 hidden">Incorrect password. Please try again.</p>
                 </div>
                 
@@ -83,7 +153,7 @@
                     <a href="index.html" class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-arrow-left mr-1"></i> Back to Quiz
                     </a>
-                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md transition-all">
+                    <button type="submit" class="eco-button py-2 px-6 rounded-md transition-all">
                         <i class="fas fa-unlock-alt mr-2"></i> Access
                     </button>
                 </div>
@@ -95,7 +165,9 @@
         <header class="mb-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <i class="fas fa-leaf text-3xl text-green-600 mr-3"></i>
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-leaf text-2xl text-green-600"></i>
+                    </div>
                     <h1 class="text-2xl font-bold text-green-800">Eco Quiz Admin</h1>
                 </div>
                 <div class="flex items-center gap-4">
@@ -110,9 +182,9 @@
             <p class="text-gray-600 mt-2">View quiz attendee statistics</p>
         </header>
 
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6 responsive-card">
+        <div class="eco-card rounded-lg p-6 mb-6 responsive-card">
             <div class="mb-4 flex justify-between items-center flex-wrap gap-2">
-                <h2 class="text-xl font-semibold text-gray-800">Quiz Attendees</h2>
+                <h2 class="text-xl font-semibold text-green-800">Quiz Attendees</h2>
                 <div class="flex gap-2 flex-wrap">
                     <button id="refresh-btn" class="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200">
                         <i class="fas fa-sync-alt mr-2"></i> Refresh
@@ -124,29 +196,38 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-green-50 p-4 rounded-md">
-                    <h3 class="text-lg font-medium text-green-800 mb-2">Total Participants</h3>
+                <div class="bg-green-50 p-4 rounded-md border border-green-100">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-users text-green-600 mr-2"></i>
+                        <h3 class="text-lg font-medium text-green-800">Total Participants</h3>
+                    </div>
                     <p id="total-attendees" class="text-3xl font-bold text-green-600">0</p>
                 </div>
-                <div class="bg-blue-50 p-4 rounded-md">
-                    <h3 class="text-lg font-medium text-blue-800 mb-2">Average Score</h3>
+                <div class="bg-blue-50 p-4 rounded-md border border-blue-100">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-star text-blue-600 mr-2"></i>
+                        <h3 class="text-lg font-medium text-blue-800">Average Score</h3>
+                    </div>
                     <p id="average-score" class="text-3xl font-bold text-blue-600">0</p>
                 </div>
             </div>
             
             <!-- Analytics Section -->
             <div class="mb-6">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">Participation Analytics</h3>
-                <div class="bg-gray-50 p-4 rounded-md">
-                    <h4 class="text-md font-medium text-gray-700 mb-2">Daily Participation</h4>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-chart-line text-green-600 mr-2"></i>
+                    <h3 class="text-lg font-medium text-green-800">Participation Analytics</h3>
+                </div>
+                <div class="bg-green-50 p-4 rounded-md border border-green-100">
+                    <h4 class="text-md font-medium text-green-700 mb-2">Daily Participation</h4>
                     <canvas id="daily-chart" height="150"></canvas>
                 </div>
             </div>
             
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto bg-white rounded-md border border-green-100">
                 <table class="min-w-full bg-white">
                     <thead>
-                        <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                        <tr class="bg-green-50 text-green-800 uppercase text-xs leading-normal">
                             <th class="py-3 px-6 text-left">Name</th>
                             <th class="py-3 px-6 text-left">Date & Time</th>
                             <th class="py-3 px-6 text-center">Score</th>
@@ -154,7 +235,7 @@
                     </thead>
                     <tbody id="attendees-table" class="text-gray-600 text-sm">
                         <!-- Attendee data will be loaded here -->
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <tr class="border-b border-gray-200 hover:bg-green-50">
                             <td class="py-3 px-6 text-left" colspan="3">Loading attendee data...</td>
                         </tr>
                     </tbody>
@@ -162,29 +243,32 @@
             </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6 responsive-card">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Management</h2>
+        <div class="eco-card rounded-lg p-6 mb-6 responsive-card">
+            <div class="flex items-center mb-4">
+                <i class="fas fa-database text-green-600 mr-2"></i>
+                <h2 class="text-xl font-semibold text-green-800">Data Management</h2>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="text-md font-medium text-gray-700 mb-2">Export Data</h3>
+                    <h3 class="text-md font-medium text-green-700 mb-2">Export Data</h3>
                     <p class="text-sm text-gray-500 mb-3">Download your data for backup or analysis</p>
                     <div class="flex gap-2 flex-wrap">
-                        <button id="export-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        <button id="export-btn" class="eco-button px-4 py-2 rounded-md transition-all">
                             <i class="fas fa-download mr-2"></i> Export CSV
                         </button>
-                        <button id="export-json-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        <button id="export-json-btn" class="eco-button px-4 py-2 rounded-md transition-all">
                             <i class="fas fa-file-code mr-2"></i> Export JSON
                         </button>
                     </div>
                 </div>
                 
                 <div>
-                    <h3 class="text-md font-medium text-gray-700 mb-2">Import Data</h3>
+                    <h3 class="text-md font-medium text-green-700 mb-2">Import Data</h3>
                     <p class="text-sm text-gray-500 mb-3">Restore from a previous backup</p>
                     <div class="flex flex-col gap-2">
                         <input type="file" id="import-file" class="hidden" accept=".json">
-                        <button id="import-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <button id="import-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition-all">
                             <i class="fas fa-upload mr-2"></i> Import Backup
                         </button>
                         <div id="import-status" class="text-sm text-gray-500 mt-1"></div>
@@ -207,6 +291,12 @@
         </div>
 
         <footer class="text-center text-sm text-gray-500 mt-8">
+            <div class="mb-2">
+                <i class="fas fa-seedling text-green-500 mr-1"></i>
+                <i class="fas fa-tint text-blue-400 mx-1"></i>
+                <i class="fas fa-sun text-yellow-500 mx-1"></i>
+                <i class="fas fa-wind text-gray-400 ml-1"></i>
+            </div>
             <p>Admin dashboard for Eco Quiz Challenge</p>
             <p class="text-xs mt-1">Data is stored locally in your browser</p>
         </footer>
@@ -214,6 +304,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Audio element
+            const clickSound = document.getElementById('click-sound');
+            
+            // Function to play sound
+            function playSound(audioElement) {
+                // Reset the audio to the beginning
+                audioElement.currentTime = 0;
+                // Reduce volume for a better experience
+                audioElement.volume = 0.3;
+                // Play the sound
+                audioElement.play().catch(e => console.log("Audio play failed:", e));
+            }
+            
             const STORAGE_KEY = 'eco_quiz_attendees';
             const BACKUP_TIMESTAMP_KEY = 'eco_quiz_last_backup';
             const PASSWORD_KEY = 'eco_quiz_admin_password';
@@ -248,6 +351,7 @@
             // Handle password submission
             passwordForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+                playSound(clickSound);
                 
                 const enteredPassword = passwordInput.value;
                 const currentPassword = getPassword();
@@ -272,13 +376,15 @@
             
             // Lock button handler
             lockBtn.addEventListener('click', function() {
+                playSound(clickSound);
                 adminContent.classList.add('hidden');
                 passwordOverlay.classList.remove('hidden');
                 passwordError.classList.add('hidden');
             });
             
-            // Change password button handler
+            // Change password button handler with sound
             changePasswordBtn.addEventListener('click', function() {
+                playSound(clickSound);
                 const currentPassword = prompt('Enter current password:');
                 
                 if (!currentPassword) return;
@@ -321,6 +427,37 @@
             const backupBtn = document.getElementById('backup-btn');
             
             let dailyChart = null;
+            
+            // Add sound to all buttons
+            refreshBtn.addEventListener('click', function() {
+                playSound(clickSound);
+                loadAttendeeData();
+            });
+            
+            exportBtn.addEventListener('click', function() {
+                playSound(clickSound);
+                exportData();
+            });
+            
+            exportJsonBtn.addEventListener('click', function() {
+                playSound(clickSound);
+                exportJsonData();
+            });
+            
+            importBtn.addEventListener('click', function() {
+                playSound(clickSound);
+                importData();
+            });
+            
+            clearBtn.addEventListener('click', function() {
+                playSound(clickSound);
+                clearData();
+            });
+            
+            backupBtn.addEventListener('click', function() {
+                playSound(clickSound);
+                createBackup();
+            });
             
             // Load and display attendee data
             function loadAttendeeData() {
@@ -595,15 +732,6 @@
                     alert('All attendee data has been cleared');
                 }
             }
-            
-            // Event listeners
-            refreshBtn.addEventListener('click', loadAttendeeData);
-            exportBtn.addEventListener('click', exportData);
-            exportJsonBtn.addEventListener('click', exportJsonData);
-            importBtn.addEventListener('click', importData);
-            importFile.addEventListener('change', handleFileImport);
-            clearBtn.addEventListener('click', clearData);
-            backupBtn.addEventListener('click', createBackup);
         });
     </script>
 </body>
