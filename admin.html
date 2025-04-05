@@ -21,8 +21,373 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #F1F8E9; /* Very light natural green */
-            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"%3E%3Cpath fill="%232E7D32" d="M50,0 L100,50 L50,100 L0,50 z"%3E%3C/path%3E%3C/svg%3E');
+            background-color: #87CEEB; /* Sky blue */
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Nature Animation Scene */
+        .nature-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Sky gradient */
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #87CEEB 0%, #e0f7fa 100%);
+        }
+        
+        /* Sun */
+        .sun {
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #FDD835 30%, rgba(255,235,59,0.3) 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 235, 59, 0.8);
+            animation: sun-glow 5s infinite alternate;
+        }
+        
+        @keyframes sun-glow {
+            0% { box-shadow: 0 0 50px rgba(255, 235, 59, 0.6); }
+            100% { box-shadow: 0 0 70px rgba(255, 235, 59, 0.8); }
+        }
+        
+        /* Clouds */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.9;
+            box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .cloud-1 {
+            top: 15%;
+            left: -10%;
+            width: 120px;
+            height: 60px;
+            animation: float-cloud-1 60s linear infinite;
+        }
+        
+        .cloud-1::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 15px;
+        }
+        
+        .cloud-1::after {
+            width: 80px;
+            height: 80px;
+            top: -25px;
+            right: 15px;
+        }
+        
+        .cloud-2 {
+            top: 25%;
+            left: -15%;
+            width: 160px;
+            height: 70px;
+            animation: float-cloud-2 75s linear infinite;
+        }
+        
+        .cloud-2::before {
+            width: 70px;
+            height: 70px;
+            top: -30px;
+            left: 20px;
+        }
+        
+        .cloud-2::after {
+            width: 100px;
+            height: 100px;
+            top: -40px;
+            right: 25px;
+        }
+        
+        .cloud-3 {
+            top: 10%;
+            left: -5%;
+            width: 100px;
+            height: 50px;
+            animation: float-cloud-3 45s linear infinite;
+        }
+        
+        .cloud-3::before {
+            width: 50px;
+            height: 50px;
+            top: -20px;
+            left: 10px;
+        }
+        
+        .cloud-3::after {
+            width: 70px;
+            height: 70px;
+            top: -25px;
+            right: 10px;
+        }
+        
+        @keyframes float-cloud-1 {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+        
+        @keyframes float-cloud-2 {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 250px)); }
+        }
+        
+        @keyframes float-cloud-3 {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 150px)); }
+        }
+        
+        /* Birds */
+        .bird {
+            position: absolute;
+            height: 2px;
+            background-color: transparent;
+        }
+        
+        .bird::before,
+        .bird::after {
+            content: '';
+            position: absolute;
+            height: 8px;
+            width: 20px;
+            top: -4px;
+            background-color: #333;
+            border-radius: 50% 50% 0 0;
+            animation: flap-wings 0.8s infinite alternate;
+        }
+        
+        .bird::before {
+            left: -8px;
+            transform-origin: right center;
+        }
+        
+        .bird::after {
+            left: 8px;
+            transform-origin: left center;
+        }
+        
+        @keyframes flap-wings {
+            0% { transform: rotateZ(0); }
+            100% { transform: rotateZ(30deg); }
+        }
+        
+        .bird-1 {
+            top: 20%;
+            left: -50px;
+            width: 30px;
+            animation: fly-bird-1 20s linear infinite;
+        }
+        
+        .bird-2 {
+            top: 15%;
+            left: -70px;
+            width: 25px;
+            animation: fly-bird-2 25s linear infinite;
+        }
+        
+        .bird-3 {
+            top: 12%;
+            left: -40px;
+            width: 20px;
+            animation: fly-bird-3 18s linear infinite;
+        }
+        
+        .bird-4 {
+            top: 18%;
+            left: -60px;
+            width: 28px;
+            animation: fly-bird-4 22s linear infinite;
+        }
+        
+        .bird-5 {
+            top: 25%;
+            left: -80px;
+            width: 22px;
+            animation: fly-bird-5 27s linear infinite;
+        }
+        
+        @keyframes fly-bird-1 {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(calc(50vw + 100px)) translateY(-30px); }
+            100% { transform: translateX(calc(100vw + 150px)) translateY(0); }
+        }
+        
+        @keyframes fly-bird-2 {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(calc(50vw + 100px)) translateY(-50px); }
+            100% { transform: translateX(calc(100vw + 150px)) translateY(0); }
+        }
+        
+        @keyframes fly-bird-3 {
+            0% { transform: translateX(0) translateY(0); }
+            40% { transform: translateX(calc(40vw)) translateY(-20px); }
+            70% { transform: translateX(calc(70vw)) translateY(-40px); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(0); }
+        }
+        
+        @keyframes fly-bird-4 {
+            0% { transform: translateX(0) translateY(0); }
+            60% { transform: translateX(calc(60vw)) translateY(-35px); }
+            100% { transform: translateX(calc(100vw + 150px)) translateY(0); }
+        }
+        
+        @keyframes fly-bird-5 {
+            0% { transform: translateX(0) translateY(0); }
+            45% { transform: translateX(calc(45vw)) translateY(-25px); }
+            80% { transform: translateX(calc(80vw)) translateY(-15px); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(0); }
+        }
+        
+        /* Rolling hills */
+        .hills {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            z-index: 0;
+        }
+        
+        .hill-1 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25%;
+            background-color: #8BC34A;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            transform: scaleX(1.5) translateY(20%);
+        }
+        
+        .hill-2 {
+            position: absolute;
+            bottom: 0;
+            left: -50%;
+            width: 80%;
+            height: 30%;
+            background-color: #689F38;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            transform: scaleX(2) translateY(10%);
+        }
+        
+        .hill-3 {
+            position: absolute;
+            bottom: 0;
+            right: -20%;
+            width: 70%;
+            height: 20%;
+            background-color: #558B2F;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            transform: scaleX(2);
+        }
+        
+        /* Trees */
+        .tree {
+            position: absolute;
+            bottom: 24%;
+            z-index: 1;
+        }
+        
+        .tree-trunk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 30px;
+            background-color: #795548;
+            border-radius: 2px;
+        }
+        
+        .tree-top {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 60px solid #2E7D32;
+            z-index: 2;
+        }
+        
+        .tree-top-2 {
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 50px solid #388E3C;
+            z-index: 1;
+        }
+        
+        .tree-top-3 {
+            position: absolute;
+            bottom: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 40px solid #43A047;
+            z-index: 0;
+        }
+        
+        .tree-1 {
+            left: 10%;
+            transform: scale(0.7);
+        }
+        
+        .tree-2 {
+            left: 20%;
+            transform: scale(0.9);
+        }
+        
+        .tree-3 {
+            left: 35%;
+            transform: scale(0.6);
+        }
+        
+        .tree-4 {
+            left: 75%;
+            transform: scale(0.8);
+        }
+        
+        .tree-5 {
+            left: 85%;
+            transform: scale(0.7);
         }
         
         .eco-card {
@@ -30,6 +395,8 @@
             border: 1px solid #E8F5E9;
             box-shadow: 0 10px 15px rgba(27, 94, 32, 0.08);
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
         }
         
         .eco-card:hover {
@@ -121,6 +488,66 @@
     </style>
 </head>
 <body class="min-h-screen p-6 responsive-padding">
+    <!-- Animated Nature Scene -->
+    <div class="nature-scene">
+        <div class="sky"></div>
+        <div class="sun"></div>
+        
+        <!-- Clouds -->
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        
+        <!-- Birds -->
+        <div class="bird bird-1"></div>
+        <div class="bird bird-2"></div>
+        <div class="bird bird-3"></div>
+        <div class="bird bird-4"></div>
+        <div class="bird bird-5"></div>
+        
+        <!-- Hills and Trees -->
+        <div class="hills">
+            <div class="hill-1"></div>
+            <div class="hill-2"></div>
+            <div class="hill-3"></div>
+        </div>
+        
+        <div class="tree tree-1">
+            <div class="tree-trunk"></div>
+            <div class="tree-top"></div>
+            <div class="tree-top-2"></div>
+            <div class="tree-top-3"></div>
+        </div>
+        
+        <div class="tree tree-2">
+            <div class="tree-trunk"></div>
+            <div class="tree-top"></div>
+            <div class="tree-top-2"></div>
+            <div class="tree-top-3"></div>
+        </div>
+        
+        <div class="tree tree-3">
+            <div class="tree-trunk"></div>
+            <div class="tree-top"></div>
+            <div class="tree-top-2"></div>
+            <div class="tree-top-3"></div>
+        </div>
+        
+        <div class="tree tree-4">
+            <div class="tree-trunk"></div>
+            <div class="tree-top"></div>
+            <div class="tree-top-2"></div>
+            <div class="tree-top-3"></div>
+        </div>
+        
+        <div class="tree tree-5">
+            <div class="tree-trunk"></div>
+            <div class="tree-top"></div>
+            <div class="tree-top-2"></div>
+            <div class="tree-top-3"></div>
+        </div>
+    </div>
+
     <!-- Audio Element -->
     <audio id="click-sound" preload="auto">
         <source src="https://assets.mixkit.co/sfx/preview/mixkit-simple-countdown-922.mp3" type="audio/mpeg">
